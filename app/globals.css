@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+/*
+ * The only place colours and fonts are defined. Components use these semantic
+ * names (bg-surface, text-ink, ...) and never raw palette colours, so the brand
+ * theme can be dropped in here later without touching components.
+ */
+@theme {
+  --color-surface: var(--color-white);
+  --color-surface-muted: var(--color-neutral-100);
+  --color-ink: var(--color-neutral-900);
+  --color-ink-muted: var(--color-neutral-600);
+  --color-line: var(--color-neutral-300);
+  --color-action: var(--color-neutral-900);
+  --color-action-ink: var(--color-white);
+  --color-danger: var(--color-neutral-900);
+
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
