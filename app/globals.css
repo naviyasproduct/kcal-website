@@ -2,24 +2,71 @@
 
 /*
  * The only place colours and fonts are defined. Components use these semantic
- * names (bg-surface, text-ink, ...) and never raw palette colours, so the brand
- * theme can be dropped in here later without touching components.
+ * names (bg-surface, text-ink, ...) and never raw palette colours.
+ * Brand: cream #fbf8e5, deep green #2a4932, yellow #e3c73c (from the logo files).
  */
 @theme {
-  --color-surface: var(--color-white);
-  --color-surface-muted: var(--color-neutral-100);
-  --color-ink: var(--color-neutral-900);
-  --color-ink-muted: var(--color-neutral-600);
-  --color-line: var(--color-neutral-300);
-  --color-action: var(--color-neutral-900);
-  --color-action-ink: var(--color-white);
-  --color-danger: var(--color-neutral-900);
+  --color-surface: #fbf8e5;
+  --color-surface-muted: #f3edcd;
+  --color-card: #fffdf4;
+  --color-ink: #1c3024;
+  --color-ink-muted: #5d6e60;
+  --color-line: #e3dcb8;
+  --color-brand: #2a4932;
+  --color-brand-ink: #fbf8e5;
+  --color-action: #23803f;
+  --color-action-hover: #1b6a33;
+  --color-action-ink: #ffffff;
+  --color-accent: #e3c73c;
+  --color-accent-soft: #f4e9a8;
+  --color-leaf-soft: #dcebcf;
+  --color-danger: #b3412c;
 
-  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+
+  --animate-rise: rise 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-grow: grow 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes ring {
+  from {
+    stroke-dashoffset: var(--ring-length);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   background-color: var(--color-surface);
   color: var(--color-ink);
   font-family: var(--font-sans);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
 }
