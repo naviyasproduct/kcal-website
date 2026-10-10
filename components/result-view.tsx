@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import type { Plan } from "@/lib/catalog/data";
 import type { NutritionResult } from "@/lib/nutrition/calculate";
 import { formatLkr } from "@/lib/format";
+import { Arrow, Badge, Heart } from "./brand";
 import { buttonStyles } from "./button";
 
 const RING = 2 * Math.PI * 52;
@@ -22,31 +23,41 @@ type ResultViewProps = {
 export function ResultView({ result, plan, onEdit }: ResultViewProps) {
   const macroKcal = result.proteinG * 4 + result.carbsG * 4 + result.fatG * 9;
   const macros = [
-    { label: "Protein", grams: result.proteinG, kcal: result.proteinG * 4, color: "bg-action" },
-    { label: "Carbs", grams: result.carbsG, kcal: result.carbsG * 4, color: "bg-accent" },
-    { label: "Fat", grams: result.fatG, kcal: result.fatG * 9, color: "bg-brand" },
+    {
+      label: "protein",
+      grams: result.proteinG,
+      kcal: result.proteinG * 4,
+      block: "bg-brand text-cream",
+    },
+    {
+      label: "carbs",
+      grams: result.carbsG,
+      kcal: result.carbsG * 4,
+      block: "bg-accent text-brand",
+    },
+    { label: "fat", grams: result.fatG, kcal: result.fatG * 9, block: "bg-cream-deep text-ink" },
   ];
 
   return (
-    <div className="flex flex-col gap-5">
-      <section className="animate-rise flex flex-col items-center gap-2 rounded-3xl bg-brand px-6 py-8 text-brand-ink">
-        <p className="text-sm text-brand-ink/70">Your daily target</p>
-        <div className="relative grid size-40 place-items-center">
+    <div className="flex flex-col gap-4">
+      <section className="animate-rise flex flex-col items-center gap-3 rounded-[2rem] bg-brand px-6 py-10 text-cream">
+        <h1 className="text-3xl">your daily target</h1>
+        <div className="relative grid size-56 place-items-center">
           <svg viewBox="0 0 120 120" className="absolute inset-0 -rotate-90" aria-hidden>
             <circle
               cx="60"
               cy="60"
               r="52"
               fill="none"
-              strokeWidth="10"
-              className="stroke-brand-ink/15"
+              strokeWidth="12"
+              className="stroke-cream/15"
             />
             <circle
               cx="60"
               cy="60"
               r="52"
               fill="none"
-              strokeWidth="10"
+              strokeWidth="12"
               strokeLinecap="round"
               className="stroke-accent"
               strokeDasharray={RING}
@@ -54,28 +65,34 @@ export function ResultView({ result, plan, onEdit }: ResultViewProps) {
               style={
                 {
                   "--ring-length": RING,
-                  animation: "ring 900ms cubic-bezier(0.2,0.8,0.2,1) both",
+                  animation: "ring 1100ms var(--ease-bounce) both",
                 } as CSSProperties
               }
             />
           </svg>
           <div className="text-center">
-            <p className="font-display text-4xl font-bold tabular-nums">
+            <p className="font-display text-6xl leading-none tracking-[-0.04em] tabular-nums">
               {result.calories.toLocaleString()}
             </p>
-            <p className="text-sm text-brand-ink/70">kcal / day</p>
+            <p className="font-bold text-cream/80">kcal a day</p>
           </div>
         </div>
       </section>
 
-      <section className="animate-rise grid grid-cols-3 gap-3 [animation-delay:80ms]">
-        {macros.map((m) => (
-          <div key={m.label} className="rounded-2xl bg-card p-3 ring-1 ring-line">
-            <p className="text-xs text-ink-muted">{m.label}</p>
-            <p className="font-display text-2xl font-bold tabular-nums">{m.grams}g</p>
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-surface-muted">
+      <section className="grid grid-cols-3 gap-3">
+        {macros.map((m, i) => (
+          <div
+            key={m.label}
+            className={`animate-rise flex flex-col gap-1 rounded-[1.5rem] p-4 ${m.block}`}
+            style={{ animationDelay: `${80 + i * 60}ms` }}
+          >
+            <p className="text-sm font-bold">{m.label}</p>
+            <p className="font-display text-3xl leading-none tracking-[-0.03em] tabular-nums">
+              {m.grams}g
+            </p>
+            <div className="mt-2 h-2 overflow-hidden rounded-full bg-current/15">
               <div
-                className={`animate-grow h-full origin-left rounded-full ${m.color}`}
+                className="h-full origin-left rounded-full bg-current [animation:grow_900ms_var(--ease-bounce)_both]"
                 style={{ width: `${Math.round((m.kcal / macroKcal) * 100)}%` }}
               />
             </div>
@@ -84,37 +101,39 @@ export function ResultView({ result, plan, onEdit }: ResultViewProps) {
       </section>
 
       {plan && (
-        <section className="animate-rise flex flex-col gap-4 rounded-3xl bg-card p-5 ring-1 ring-line [animation-delay:160ms]">
+        <section className="animate-rise flex flex-col gap-5 rounded-[2rem] bg-cream-deep p-6 [animation-delay:260ms]">
           <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="text-xs font-semibold tracking-wide text-action uppercase">
-                Best plan for you
+            <div className="flex flex-col items-start gap-3">
+              <Badge>best plan for you</Badge>
+              <h2 className="text-5xl">{plan.name}</h2>
+              <p className="flex items-center gap-2 text-ink-muted">
+                <Heart className="size-4 text-brand" /> {plan.tagline}, 3 meals a day
               </p>
-              <h2 className="font-display text-2xl font-bold">{plan.name}</h2>
-              <p className="text-sm text-ink-muted">{plan.tagline} · 3 meals a day</p>
             </div>
             <p className="text-right">
-              <span className="block font-display text-xl font-bold">{formatLkr(plan.price)}</span>
-              <span className="text-xs text-ink-muted">per week</span>
+              <span className="block font-display text-2xl tracking-[-0.03em]">
+                {formatLkr(plan.price)}
+              </span>
+              <span className="text-sm text-ink-muted">a week</span>
             </p>
           </div>
           <Link href={`/checkout?plan=${plan.id}`} className={buttonStyles("primary", "lg")}>
-            Subscribe to this plan
+            subscribe to this plan <Arrow />
           </Link>
         </section>
       )}
 
-      <div className="flex flex-col items-center gap-2 text-center">
+      <div className="flex flex-col items-center gap-2 pt-2 text-center">
         {onEdit && (
           <button
             type="button"
             onClick={onEdit}
-            className="text-sm font-medium text-action underline-offset-4 hover:underline"
+            className="font-bold text-brand underline decoration-accent decoration-4 underline-offset-4"
           >
-            Change my answers
+            change my answers
           </button>
         )}
-        <p className="text-xs text-ink-muted">This is an estimate, not medical advice.</p>
+        <p className="text-sm text-ink-muted">This is an estimate, not medical advice.</p>
       </div>
     </div>
   );

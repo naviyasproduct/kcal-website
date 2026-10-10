@@ -1,11 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
+import { DM_Sans, Dela_Gothic_One } from "next/font/google";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import "./globals.css";
 
-const heading = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-heading" });
-const body = DM_Sans({ subsets: ["latin"], variable: "--font-body" });
+const heading = Dela_Gothic_One({ weight: "400", subsets: ["latin"], variable: "--font-heading" });
+const body = DM_Sans({
+  weight: ["400", "500", "700"],
+  subsets: ["latin"],
+  variable: "--font-body",
+});
 
 export const metadata: Metadata = {
   title: "kcal",
@@ -15,7 +19,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#fbf8e5",
+  themeColor: "#2a4932",
 };
 
 /**
@@ -25,7 +29,11 @@ export const viewport: Viewport = {
  */
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${heading.variable} ${body.variable}`}>
+    <html
+      lang="en"
+      data-scroll-behavior="smooth"
+      className={`${heading.variable} ${body.variable}`}
+    >
       <body className="flex min-h-dvh flex-col antialiased">
         <SiteHeader />
         <div className="flex-1">{children}</div>

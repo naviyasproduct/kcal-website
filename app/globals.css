@@ -1,38 +1,44 @@
 @import "tailwindcss";
 
 /*
- * The only place colours and fonts are defined. Components use these semantic
- * names (bg-surface, text-ink, ...) and never raw palette colours.
- * Brand: cream #fbf8e5, deep green #2a4932, yellow #e3c73c (from the logo files).
+ * The only place colours, fonts, easing and brand shapes are defined.
+ * Components use these names (bg-brand, bg-cream, text-ink, bg-accent, ...)
+ * and never raw palette colours. To re-brand, change the values here.
  */
 @theme {
-  --color-surface: #fbf8e5;
-  --color-surface-muted: #f3edcd;
-  --color-card: #fffdf4;
-  --color-ink: #1c3024;
-  --color-ink-muted: #5d6e60;
-  --color-line: #e3dcb8;
   --color-brand: #2a4932;
-  --color-brand-ink: #fbf8e5;
-  --color-action: #23803f;
-  --color-action-hover: #1b6a33;
-  --color-action-ink: #ffffff;
+  --color-brand-soft: #3e6a4a;
+  --color-cream: #faf6e3;
+  --color-cream-deep: #efe7c4;
+  --color-ink: #1e1b16;
+  --color-ink-muted: #5f584b;
   --color-accent: #e3c73c;
-  --color-accent-soft: #f4e9a8;
-  --color-leaf-soft: #dcebcf;
   --color-danger: #b3412c;
 
   --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-heading), "Rubik", ui-sans-serif, system-ui, sans-serif;
 
-  --animate-rise: rise 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  --animate-grow: grow 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-rise: rise 600ms var(--ease-bounce) both;
+  --animate-pop: pop 700ms var(--ease-bounce) both;
+}
+
+:root {
+  /* Height of the slanted section edges: about 12° on phones, capped on wide screens. */
+  --cut: min(21vw, 8rem);
 }
 
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(32px);
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
   }
 }
 
@@ -48,15 +54,76 @@
   }
 }
 
+/* Full-width colour block with a slanted bottom / top edge, echoing the cuts in the logo. */
+@utility slant-b {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), 0 100%);
+  padding-bottom: calc(var(--cut) + 2.5rem);
+}
+
+@utility slant-t {
+  clip-path: polygon(0 var(--cut), 100% 0, 100% 100%, 0 100%);
+  padding-top: calc(var(--cut) + 2.5rem);
+}
+
+@utility slant-y {
+  clip-path: polygon(0 var(--cut), 100% 0, 100% calc(100% - var(--cut)), 0 100%);
+  padding-block: calc(var(--cut) + 2.5rem);
+}
+
+/* Photo masks with one slanted side. */
+@utility mask-slant {
+  clip-path: polygon(14% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+@utility mask-slant-b {
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+}
+
 html {
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background-color: var(--color-surface);
+  background-color: var(--color-cream);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: lowercase;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-brand);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
+.bg-brand :focus-visible,
+.bg-brand-soft :focus-visible {
+  outline-color: var(--color-accent);
+}
+
+/* Slide up as sections scroll into view. Browsers without scroll timelines just show them. */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: rise linear both;
+    animation-timing-function: var(--ease-bounce);
+    animation-timeline: view();
+    animation-range: entry 0% entry 35%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -66,7 +133,7 @@ body {
   *,
   *::before,
   *::after {
-    animation-duration: 1ms !important;
+    animation: none !important;
     transition-duration: 1ms !important;
   }
 }

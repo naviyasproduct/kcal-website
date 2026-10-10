@@ -1,17 +1,18 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 import { plans } from "@/lib/catalog/data";
 import { calculate, type NutritionResult } from "@/lib/nutrition/calculate";
 import { calculatorInputSchema, type Goal, type Sex } from "@/lib/nutrition/schema";
+import { Arrow, Heart } from "./brand";
 import { buttonStyles } from "./button";
 import { ResultView } from "./result-view";
 
 const goalOptions: { value: Goal; title: string; hint: string }[] = [
-  { value: "bulk", title: "Build muscle", hint: "More food, more protein" },
-  { value: "cut", title: "Lose fat", hint: "Fewer calories, full plate" },
-  { value: "maintain", title: "Stay in shape", hint: "Keep what you have" },
-  { value: "healthy", title: "Just eat healthy", hint: "No gym, just good food" },
+  { value: "bulk", title: "build muscle", hint: "More food, more protein" },
+  { value: "cut", title: "lose fat", hint: "Fewer calories, full plate" },
+  { value: "maintain", title: "stay in shape", hint: "Keep what you have" },
+  { value: "healthy", title: "just eat healthy", hint: "No gym, just good food" },
 ];
 
 const bodySchema = calculatorInputSchema.pick({ age: true, heightCm: true, weightKg: true });
@@ -88,43 +89,32 @@ export function CalculatorForm({ initialGoal }: { initialGoal?: Goal }) {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={() => go(step - 1)}
           disabled={step === 0}
           aria-label="Back"
-          className="grid size-10 place-items-center rounded-full ring-1 ring-line transition-[opacity,transform] active:scale-95 disabled:opacity-0"
+          className="grid size-12 place-items-center rounded-full bg-cream-deep transition-[opacity,transform] duration-300 ease-bounce hover:scale-110 active:scale-95 disabled:opacity-0"
         >
-          <svg
-            viewBox="0 0 24 24"
-            className="size-5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden
-          >
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
+          <Arrow back />
         </button>
-        <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface-muted">
+        <div className="h-3 flex-1 overflow-hidden rounded-full bg-cream-deep">
           <div
-            className="h-full origin-left rounded-full bg-action transition-transform duration-500 ease-out"
+            className="h-full origin-left rounded-full bg-brand transition-transform duration-500 ease-bounce"
             style={{ transform: `scaleX(${(step + 1) / STEPS})` }}
           />
         </div>
-        <span className="w-10 text-right text-sm text-ink-muted tabular-nums">
+        <span className="w-12 text-right font-display tabular-nums">
           {step + 1}/{STEPS}
         </span>
       </div>
 
-      <div key={step} className="animate-rise flex flex-col gap-5">
+      <div key={step} className="animate-rise flex flex-col gap-6">
         {step === 0 && (
           <>
-            <Title>What&apos;s your goal?</Title>
+            <Title>what&apos;s your goal?</Title>
             <div className="grid gap-3 sm:grid-cols-2">
               {goalOptions.map((o) => (
                 <Choice
@@ -135,8 +125,10 @@ export function CalculatorForm({ initialGoal }: { initialGoal?: Goal }) {
                     go(1);
                   }}
                 >
-                  <span className="block font-display text-lg font-semibold">{o.title}</span>
-                  <span className="block text-sm text-ink-muted">{o.hint}</span>
+                  <span className="block font-display text-2xl tracking-[-0.03em] lowercase">
+                    {o.title}
+                  </span>
+                  <span className="block text-sm opacity-75">{o.hint}</span>
                 </Choice>
               ))}
             </div>
@@ -145,7 +137,7 @@ export function CalculatorForm({ initialGoal }: { initialGoal?: Goal }) {
 
         {step === 1 && (
           <>
-            <Title>You are</Title>
+            <Title>you are</Title>
             <div className="grid grid-cols-2 gap-3">
               {(["male", "female"] as const).map((s) => (
                 <Choice
@@ -156,7 +148,7 @@ export function CalculatorForm({ initialGoal }: { initialGoal?: Goal }) {
                     go(2);
                   }}
                 >
-                  <span className="block py-4 text-center font-display text-lg font-semibold capitalize">
+                  <span className="block py-6 text-center font-display text-3xl tracking-[-0.03em]">
                     {s}
                   </span>
                 </Choice>
@@ -167,13 +159,15 @@ export function CalculatorForm({ initialGoal }: { initialGoal?: Goal }) {
 
         {step === 2 && (
           <form onSubmit={submitBody} noValidate className="flex flex-col gap-5">
-            <Title>About you</Title>
+            <Title>about you</Title>
             {bodyFields.map((f) => (
-              <label key={f.name} className="flex flex-col gap-1.5">
-                <span className="text-sm font-medium">{f.label}</span>
+              <label key={f.name} className="flex flex-col gap-2">
+                <span className="font-bold">{f.label}</span>
                 <span
-                  className={`flex h-14 items-center rounded-2xl bg-card px-4 ring-1 transition-shadow focus-within:ring-2 ${
-                    errors[f.name] ? "ring-danger" : "ring-line focus-within:ring-action"
+                  className={`flex h-16 items-center rounded-[1.25rem] bg-cream-deep px-5 transition-shadow ${
+                    errors[f.name]
+                      ? "ring-3 ring-danger"
+                      : "focus-within:ring-3 focus-within:ring-brand"
                   }`}
                 >
                   <input
@@ -186,28 +180,28 @@ export function CalculatorForm({ initialGoal }: { initialGoal?: Goal }) {
                       if (errors[f.name]) setErrors({ ...errors, [f.name]: undefined });
                     }}
                     aria-invalid={Boolean(errors[f.name])}
-                    className="w-full bg-transparent text-lg font-semibold outline-none"
+                    className="w-full bg-transparent font-display text-2xl tracking-[-0.03em] outline-none"
                   />
-                  <span className="text-sm text-ink-muted">{f.unit}</span>
+                  <span className="font-bold text-ink-muted">{f.unit}</span>
                 </span>
-                {errors[f.name] && <span className="text-sm text-danger">{errors[f.name]}</span>}
+                {errors[f.name] && (
+                  <span className="font-medium text-danger">{errors[f.name]}</span>
+                )}
               </label>
             ))}
             <button type="submit" className={buttonStyles("primary", "lg")}>
-              Next
+              next <Arrow />
             </button>
           </form>
         )}
 
         {step === 3 && (
           <>
-            <Title>Gym days per week</Title>
+            <Title>gym days a week</Title>
             <div className="grid grid-cols-4 gap-3">
               {Array.from({ length: 8 }, (_, d) => (
                 <Choice key={d} onClick={() => pickGymDays(d)}>
-                  <span className="block py-2 text-center font-display text-2xl font-bold">
-                    {d}
-                  </span>
+                  <span className="block py-3 text-center font-display text-4xl">{d}</span>
                 </Choice>
               ))}
             </div>
@@ -218,8 +212,8 @@ export function CalculatorForm({ initialGoal }: { initialGoal?: Goal }) {
   );
 }
 
-function Title({ children }: { children: React.ReactNode }) {
-  return <h1 className="font-display text-3xl font-bold tracking-tight">{children}</h1>;
+function Title({ children }: { children: ReactNode }) {
+  return <h1 className="text-[clamp(2.5rem,8vw,4rem)]">{children}</h1>;
 }
 
 function Choice({
@@ -229,16 +223,21 @@ function Choice({
 }: {
   selected?: boolean;
   onClick: () => void;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-2xl p-4 text-left ring-1 transition-[background-color,box-shadow,transform] duration-150 ease-out active:scale-[0.98] ${
-        selected ? "bg-leaf-soft ring-2 ring-action" : "bg-card ring-line hover:ring-action/50"
+      className={`group relative rounded-[1.5rem] p-5 text-left transition-[background-color,color,transform] duration-300 ease-bounce hover:scale-[1.03] active:scale-[0.97] ${
+        selected ? "bg-brand text-cream" : "bg-cream-deep text-ink hover:bg-accent hover:text-brand"
       }`}
     >
+      <Heart
+        className={`absolute top-4 right-4 size-5 transition-transform duration-300 ease-bounce ${
+          selected ? "scale-100 text-accent" : "scale-0 group-hover:scale-100"
+        }`}
+      />
       {children}
     </button>
   );

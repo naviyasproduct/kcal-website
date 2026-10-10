@@ -13,7 +13,7 @@ export default async function CalculatorPage({ searchParams }: PageProps<"/calcu
   const { goal } = await searchParams;
   const initialGoal = goals.find((g) => g === goal) as Goal | undefined;
   return (
-    <main className="mx-auto max-w-lg px-4 py-8">
+    <main className="mx-auto max-w-xl px-4 py-10">
       <CalculatorForm initialGoal={initialGoal} />
     </main>
   );

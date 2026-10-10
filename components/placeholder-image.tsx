@@ -6,41 +6,45 @@ const ratios = {
 } as const;
 
 const tones = {
-  leaf: "bg-leaf-soft text-action/40",
-  sun: "bg-accent-soft text-brand/30",
-  cream: "bg-surface-muted text-brand/25",
+  accent: "bg-accent text-brand/25",
+  brand: "bg-brand text-cream/25",
+  soft: "bg-brand-soft text-cream/25",
 } as const;
 
 type PlaceholderImageProps = {
   ratio: keyof typeof ratios;
   label: string;
   tone?: keyof typeof tones;
+  className?: string;
 };
 
 /**
- * Fixed-ratio tinted box shown where a final photo will go. Reserves space so
+ * Fixed-ratio solid block shown where a food photo will go. Reserves space so
  * swapping in a real `next/image` later causes no layout shift.
- * @param props - Aspect ratio, accessible label and tint.
+ * @param props - Aspect ratio, accessible label, tint and mask classes.
  * @returns A placeholder block.
  */
-export function PlaceholderImage({ ratio, label, tone = "cream" }: PlaceholderImageProps) {
+export function PlaceholderImage({
+  ratio,
+  label,
+  tone = "brand",
+  className = "",
+}: PlaceholderImageProps) {
   return (
     <div
       role="img"
       aria-label={label}
-      className={`${ratios[ratio]} ${tones[tone]} grid w-full place-items-center`}
+      className={`${ratios[ratio]} ${tones[tone]} grid w-full place-items-center ${className}`}
     >
-      <svg
-        viewBox="0 0 48 48"
-        className="h-1/3 w-1/3"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        aria-hidden
-      >
-        <path d="M6 24h36a18 18 0 0 1-36 0Z" />
-        <path d="M18 18c0-4 3-4 3-8M27 18c0-4 3-4 3-8" />
+      <svg viewBox="0 0 48 48" className="h-2/5 w-2/5" fill="currentColor" aria-hidden>
+        <path d="M4 22h40a2 2 0 0 1 2 2c0 10-8.5 18-20 18h-4C10.5 42 2 34 2 24a2 2 0 0 1 2-2Z" />
+        <path
+          d="M17 6c2 2 2 4 0 6s-2 4 0 6M25 4c2 2.5 2 5 0 7.5s-2 5 0 7.5M33 6c2 2 2 4 0 6s-2 4 0 6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinecap="round"
+        />
       </svg>
     </div>
   );

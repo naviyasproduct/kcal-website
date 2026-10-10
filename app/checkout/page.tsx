@@ -17,8 +17,8 @@ export default async function CheckoutPage({ searchParams }: PageProps<"/checkou
   if (!plan) redirect("/plans");
 
   return (
-    <main className="mx-auto flex max-w-lg flex-col gap-6 px-4 py-8">
-      <h1 className="font-display text-3xl font-bold tracking-tight">Checkout</h1>
+    <main className="mx-auto flex max-w-xl flex-col gap-8 px-4 py-10">
+      <h1 className="animate-rise text-[clamp(2.5rem,8vw,4rem)]">checkout</h1>
       <CheckoutForm initialPlan={plan} minDate={earliestStartDate()} />
     </main>
   );

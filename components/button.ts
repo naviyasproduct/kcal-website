@@ -1,25 +1,27 @@
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-action disabled:pointer-events-none disabled:opacity-50";
+  "inline-flex items-center justify-center gap-2 rounded-full font-display lowercase tracking-[-0.02em] transition-transform duration-300 ease-bounce hover:scale-[1.04] active:scale-[0.96] disabled:pointer-events-none disabled:opacity-60";
 
 const variants = {
-  primary: "bg-action text-action-ink hover:bg-action-hover",
-  secondary: "bg-card text-ink ring-1 ring-line hover:bg-surface-muted",
-  accent: "bg-accent text-brand hover:bg-accent-soft",
+  primary: "bg-accent text-brand",
+  dark: "bg-brand text-cream",
+  light: "bg-cream text-brand",
 } as const;
 
 const sizes = {
-  md: "h-11 px-5 text-sm",
-  lg: "h-14 px-7 text-base",
+  md: "h-12 px-6 text-sm",
+  lg: "h-16 px-8 text-lg",
 } as const;
 
+export type ButtonVariant = keyof typeof variants;
+
 /**
- * Class names for a button or a link styled as one.
- * @param variant - Visual style.
+ * Class names for a chunky pill button, or a link styled as one.
+ * @param variant - Fill colour.
  * @param size - Height and padding.
  * @returns Tailwind class string.
  */
 export function buttonStyles(
-  variant: keyof typeof variants = "primary",
+  variant: ButtonVariant = "primary",
   size: keyof typeof sizes = "md",
 ): string {
   return `${base} ${variants[variant]} ${sizes[size]}`;

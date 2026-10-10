@@ -5,6 +5,7 @@ import { useState, type FormEvent, type ReactNode } from "react";
 import { deliveryLocations, plans, type BillingPeriod, type Plan } from "@/lib/catalog/data";
 import { checkoutSchema, type CheckoutInput } from "@/lib/checkout/schema";
 import { formatLkr } from "@/lib/format";
+import { Arrow, Badge, Heart } from "./brand";
 import { buttonStyles } from "./button";
 import { PeriodToggle } from "./period-toggle";
 
@@ -51,29 +52,29 @@ export function CheckoutForm({ initialPlan, minDate }: { initialPlan: Plan; minD
   }
 
   const inputClass = (field: Field) =>
-    `h-14 w-full rounded-2xl bg-card px-4 text-base ring-1 outline-none transition-shadow focus:ring-2 ${
-      errors[field] ? "ring-danger" : "ring-line focus:ring-action"
+    `h-16 w-full rounded-[1.25rem] bg-cream-deep px-5 text-lg font-medium outline-none transition-shadow ${
+      errors[field] ? "ring-3 ring-danger" : "focus:ring-3 focus:ring-brand"
     }`;
 
   return (
-    <form onSubmit={submit} noValidate className="flex flex-col gap-6">
-      <section className="flex flex-col gap-4 rounded-3xl bg-brand p-5 text-brand-ink">
+    <form onSubmit={submit} noValidate className="flex flex-col gap-8">
+      <section className="flex flex-col gap-5 rounded-[2rem] bg-brand p-6 text-cream">
         <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-xs font-semibold tracking-wide text-accent uppercase">Your plan</p>
-            <h2 className="font-display text-2xl font-bold">{plan.name}</h2>
-            <p className="text-sm text-brand-ink/70">{plan.tagline} · 3 meals a day</p>
+          <div className="flex flex-col items-start gap-3">
+            <Badge>your plan</Badge>
+            <h2 className="text-5xl">{plan.name}</h2>
+            <p className="flex items-center gap-2 text-cream/80">
+              <Heart className="size-4 text-accent" /> {plan.tagline}, 3 meals a day
+            </p>
           </div>
-          <p className="text-right font-display text-2xl font-bold tabular-nums">
+          <p className="text-right font-display text-3xl tracking-[-0.03em] tabular-nums">
             {formatLkr(plan.price)}
           </p>
         </div>
-        <div className="text-ink">
-          <PeriodToggle value={period} onChange={setPeriod} />
-        </div>
+        <PeriodToggle value={period} onChange={setPeriod} />
       </section>
 
-      <Group title="Deliver to">
+      <Group title="deliver to">
         <div className="grid grid-cols-2 gap-3">
           {deliveryLocations.map((l) => (
             <button
@@ -81,8 +82,8 @@ export function CheckoutForm({ initialPlan, minDate }: { initialPlan: Plan; minD
               type="button"
               onClick={() => set("locationId", l.id)}
               aria-pressed={values.locationId === l.id}
-              className={`h-14 rounded-2xl font-semibold ring-1 transition-[background-color,box-shadow,transform] duration-150 active:scale-[0.98] ${
-                values.locationId === l.id ? "bg-leaf-soft ring-2 ring-action" : "bg-card ring-line"
+              className={`h-16 rounded-[1.25rem] font-display tracking-[-0.02em] lowercase transition-[background-color,color,transform] duration-300 ease-bounce hover:scale-[1.03] active:scale-[0.97] ${
+                values.locationId === l.id ? "bg-brand text-cream" : "bg-cream-deep text-ink"
               }`}
             >
               {l.name}
@@ -90,13 +91,13 @@ export function CheckoutForm({ initialPlan, minDate }: { initialPlan: Plan; minD
           ))}
         </div>
         <div
-          className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
+          className={`grid transition-[grid-template-rows,opacity] duration-500 ease-bounce ${
             values.locationId === "address"
               ? "grid-rows-[1fr] opacity-100"
               : "grid-rows-[0fr] opacity-0"
           }`}
         >
-          <div className="overflow-hidden">
+          <div className="overflow-hidden p-1">
             <Input label="Address" error={errors.addressLine}>
               <input
                 value={values.addressLine}
@@ -110,7 +111,7 @@ export function CheckoutForm({ initialPlan, minDate }: { initialPlan: Plan; minD
         </div>
       </Group>
 
-      <Group title="Start date">
+      <Group title="start date">
         <Input error={errors.startDate}>
           <input
             type="date"
@@ -122,7 +123,7 @@ export function CheckoutForm({ initialPlan, minDate }: { initialPlan: Plan; minD
         </Input>
       </Group>
 
-      <Group title="Your details">
+      <Group title="your details">
         <Input label="Name" error={errors.name}>
           <input
             value={values.name}
@@ -144,26 +145,21 @@ export function CheckoutForm({ initialPlan, minDate }: { initialPlan: Plan; minD
         </Input>
       </Group>
 
-      <Group title="Payment">
-        <div className="flex h-14 items-center justify-between rounded-2xl bg-leaf-soft px-4 ring-2 ring-action">
-          <span className="font-semibold">Cash on delivery</span>
-          <svg
-            viewBox="0 0 24 24"
-            className="size-5 text-action"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden
-          >
-            <path d="M5 12l5 5L20 7" />
-          </svg>
+      <Group title="payment">
+        <div className="flex h-16 items-center justify-between rounded-[1.25rem] bg-brand px-5 text-cream">
+          <span className="font-display tracking-[-0.02em]">cash on delivery</span>
+          <Heart className="size-5 text-accent" />
         </div>
       </Group>
 
       <button type="submit" disabled={sending} className={buttonStyles("primary", "lg")}>
-        {sending ? "Confirming…" : `Confirm · ${formatLkr(plan.price)}`}
+        {sending ? (
+          "confirming…"
+        ) : (
+          <>
+            confirm · {formatLkr(plan.price)} <Arrow />
+          </>
+        )}
       </button>
     </form>
   );
@@ -172,7 +168,7 @@ export function CheckoutForm({ initialPlan, minDate }: { initialPlan: Plan; minD
 function Group({ title, children }: { title: string; children: ReactNode }) {
   return (
     <fieldset className="flex flex-col gap-3">
-      <legend className="mb-3 font-display text-lg font-semibold">{title}</legend>
+      <legend className="mb-4 font-display text-2xl tracking-[-0.03em]">{title}</legend>
       {children}
     </fieldset>
   );
@@ -188,10 +184,10 @@ function Input({
   children: ReactNode;
 }) {
   return (
-    <label className="flex flex-col gap-1.5">
-      {label && <span className="text-sm font-medium">{label}</span>}
+    <label className="flex flex-col gap-2">
+      {label && <span className="font-bold">{label}</span>}
       {children}
-      {error && <span className="text-sm text-danger">{error}</span>}
+      {error && <span className="font-medium text-danger">{error}</span>}
     </label>
   );
 }

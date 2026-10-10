@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { PageHero } from "@/components/brand";
 import { MealCard } from "@/components/meal-card";
 import { meals, type MealType } from "@/lib/catalog/data";
 
 export const metadata: Metadata = { title: "Meals · kcal" };
 
 const sections: { type: MealType; title: string }[] = [
-  { type: "breakfast", title: "Breakfast" },
-  { type: "lunch", title: "Lunch" },
-  { type: "dinner", title: "Dinner" },
+  { type: "breakfast", title: "breakfast" },
+  { type: "lunch", title: "lunch" },
+  { type: "dinner", title: "dinner" },
 ];
 
 /**
@@ -16,31 +17,36 @@ const sections: { type: MealType; title: string }[] = [
  */
 export default function MealsPage() {
   return (
-    <main className="mx-auto flex max-w-5xl flex-col gap-8 px-4 py-10">
-      <h1 className="font-display text-4xl font-bold tracking-tight">This week&apos;s meals</h1>
-      <nav className="sticky top-16 z-20 -mx-4 flex gap-2 bg-surface/85 px-4 py-3 backdrop-blur-md">
+    <main>
+      <PageHero title="this week's menu">
+        <nav className="flex flex-wrap gap-2">
+          {sections.map((s) => (
+            <a
+              key={s.type}
+              href={`#${s.type}`}
+              className="rounded-full bg-cream px-5 py-2.5 font-display text-sm tracking-[-0.02em] text-brand transition-transform duration-300 ease-bounce hover:scale-105 hover:bg-accent"
+            >
+              {s.title}
+            </a>
+          ))}
+        </nav>
+      </PageHero>
+      <div className="mx-auto flex max-w-6xl flex-col gap-16 px-4 py-12 sm:px-6">
         {sections.map((s) => (
-          <a
-            key={s.type}
-            href={`#${s.type}`}
-            className="rounded-full bg-card px-4 py-2 text-sm font-semibold ring-1 ring-line transition-colors hover:bg-leaf-soft"
-          >
-            {s.title}
-          </a>
+          <section key={s.type} id={s.type} className="flex scroll-mt-28 flex-col gap-6">
+            <h2 className="reveal text-[clamp(2.5rem,6vw,4rem)]">{s.title}</h2>
+            <div className="grid gap-5 sm:grid-cols-3">
+              {meals
+                .filter((m) => m.mealType === s.type)
+                .map((m) => (
+                  <div key={m.slug} className="reveal">
+                    <MealCard meal={m} />
+                  </div>
+                ))}
+            </div>
+          </section>
         ))}
-      </nav>
-      {sections.map((s) => (
-        <section key={s.type} id={s.type} className="flex scroll-mt-32 flex-col gap-4">
-          <h2 className="font-display text-2xl font-bold">{s.title}</h2>
-          <div className="grid gap-4 sm:grid-cols-3">
-            {meals
-              .filter((m) => m.mealType === s.type)
-              .map((m) => (
-                <MealCard key={m.slug} meal={m} />
-              ))}
-          </div>
-        </section>
-      ))}
+      </div>
     </main>
   );
 }

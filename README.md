@@ -44,8 +44,8 @@ prisma/       schema and seed
 ## Theming
 
 All colours and fonts are defined once in the `@theme` block of [app/globals.css](app/globals.css).
-Components use only the semantic names (`bg-surface`, `text-ink`, `border-line`, `bg-action`, ...).
-To apply the brand, change the values there.
+Components use only the token names (`bg-brand`, `bg-cream`, `text-ink`, `bg-accent`, ...).
+Brand shapes (slanted edges `slant-b`, `slant-t`, `slant-y`, photo masks `mask-slant`) and the bouncy easing live there too.
 
 ## Security headers
 
