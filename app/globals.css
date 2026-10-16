@@ -114,6 +114,11 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Lenis eases the scroll itself; native smoothing on top would make it stutter. */
+html.lenis {
+  scroll-behavior: auto;
+}
+
 body {
   background-color: var(--color-cream);
   color: var(--color-ink);

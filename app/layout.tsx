@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { DM_Sans, Dela_Gothic_One } from "next/font/google";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { SmoothScroll } from "@/components/smooth-scroll";
+import "lenis/dist/lenis.css";
 import "./globals.css";
 
 const heading = Dela_Gothic_One({ weight: "400", subsets: ["latin"], variable: "--font-heading" });
@@ -35,6 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${heading.variable} ${body.variable}`}
     >
       <body className="flex min-h-dvh flex-col antialiased">
+        <SmoothScroll />
         <SiteHeader />
         <div className="flex-1">{children}</div>
         <SiteFooter />
