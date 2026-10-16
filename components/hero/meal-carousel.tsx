@@ -242,21 +242,23 @@ export function MealCarousel({ slides }: { slides: HeroSlide[] }) {
             className="absolute bottom-0 left-1/2 w-[46%] -translate-x-1/2 will-change-transform"
             style={i === 0 ? undefined : { opacity: 0 }}
           >
+            {/* Hero images are pre-compressed WebP shown near full size on every screen, so
+                they skip the optimizer and come straight from the CDN. */}
             <Image
               src={slide.image}
               alt=""
               draggable={false}
+              unoptimized
               loading="eager"
-              sizes="(min-width: 640px) 46vw, 90vw"
               className="absolute inset-0 size-full opacity-[var(--soft,0)] blur-md"
             />
             <Image
               src={slide.image}
               alt={slide.alt}
               draggable={false}
-              preload={i === 0}
-              loading={i === 0 ? undefined : "eager"}
-              sizes="(min-width: 640px) 46vw, 90vw"
+              unoptimized
+              preload={i < slides.length}
+              loading={i < slides.length ? undefined : "eager"}
               className="relative h-auto w-full opacity-[var(--sharp,1)]"
             />
           </div>

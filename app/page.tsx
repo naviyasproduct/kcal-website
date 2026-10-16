@@ -6,11 +6,11 @@ import { MealCarousel, type HeroSlide } from "@/components/hero/meal-carousel";
 import { MealCard } from "@/components/meal-card";
 import { meals } from "@/lib/catalog/data";
 import type { Goal } from "@/lib/nutrition/schema";
-import meal1 from "@/public/images/hero/meal-1.png";
-import meal2 from "@/public/images/hero/meal-2.png";
+import meal1 from "@/public/images/hero/meal-1.webp";
+import meal2 from "@/public/images/hero/meal-2.webp";
 
 /**
- * Hero slideshow. To add a meal, drop a transparent PNG in public/images/hero and list it here.
+ * Hero slideshow. To add a meal, drop a transparent WebP in public/images/hero (master PNGs live in media/hero) and list it here.
  * Nutrition figures are placeholders until the real recipes are costed.
  */
 const heroSlides: HeroSlide[] = [
