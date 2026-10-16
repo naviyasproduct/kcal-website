@@ -33,7 +33,7 @@ export function ResultView({ result, plan, onEdit }: ResultViewProps) {
       label: "carbs",
       grams: result.carbsG,
       kcal: result.carbsG * 4,
-      block: "bg-accent text-brand",
+      block: "bg-accent text-brand-deep",
     },
     { label: "fat", grams: result.fatG, kcal: result.fatG * 9, block: "bg-cream-deep text-ink" },
   ];

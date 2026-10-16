@@ -24,7 +24,7 @@ export default function MealsPage() {
             <a
               key={s.type}
               href={`#${s.type}`}
-              className="rounded-full bg-cream px-5 py-2.5 font-display text-sm tracking-[-0.02em] text-brand transition-transform duration-300 ease-bounce hover:scale-105 hover:bg-accent"
+              className="rounded-full bg-cream px-5 py-2.5 font-display text-sm tracking-[-0.02em] text-brand transition-transform duration-300 ease-bounce hover:scale-105 hover:bg-accent hover:text-brand-deep"
             >
               {s.title}
             </a>

@@ -42,7 +42,7 @@ export function Arrow({
 }
 
 const badgeTones = {
-  accent: "bg-accent text-brand",
+  accent: "bg-accent text-brand-deep",
   brand: "bg-brand text-cream",
   cream: "bg-cream text-brand",
 } as const;

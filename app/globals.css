@@ -6,8 +6,11 @@
  * and never raw palette colours. To re-brand, change the values here.
  */
 @theme {
-  --color-brand: #2a4932;
-  --color-brand-soft: #3e6a4a;
+  /* Main theme green. Dark, so kept for the hero, header bar, footer and text on accent. */
+  --color-brand-deep: #364635;
+  /* Everyday surfaces: lighter takes on the main green. */
+  --color-brand: #496647;
+  --color-brand-soft: #5c7b59;
   --color-cream: #faf6e3;
   --color-cream-deep: #efe7c4;
   --color-ink: #1e1b16;
@@ -48,6 +51,18 @@
   }
 }
 
+@keyframes appear {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes drift {
+  to {
+    mask-position: var(--tile-w) 0;
+  }
+}
+
 @keyframes ring {
   from {
     stroke-dashoffset: var(--ring-length);
@@ -79,6 +94,21 @@
   clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
 }
 
+/*
+ * Hero floor: one row of the kcal "a" pattern under the meals, drifting slowly left
+ * to right. The row is as tall as --tile-h, set by the caller. The tile is a mask
+ * so the colour comes from the background.
+ */
+@utility pattern-drift {
+  --tile-w: calc(var(--tile-h) * 140.7 / 186.5);
+  background-color: var(--color-accent);
+  mask-image: url("/images/hero/pattern-tile.svg");
+  mask-size: var(--tile-w) var(--tile-h);
+  mask-repeat: repeat-x;
+  height: var(--tile-h);
+  animation: drift 30s linear infinite;
+}
+
 html {
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
@@ -103,7 +133,7 @@ h3 {
 
 ::selection {
   background: var(--color-accent);
-  color: var(--color-brand);
+  color: var(--color-brand-deep);
 }
 
 :focus-visible {
@@ -111,6 +141,7 @@ h3 {
   outline-offset: 3px;
 }
 
+.bg-brand-deep :focus-visible,
 .bg-brand :focus-visible,
 .bg-brand-soft :focus-visible {
   outline-color: var(--color-accent);

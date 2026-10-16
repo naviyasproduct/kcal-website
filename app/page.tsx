@@ -1,12 +1,40 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Arrow, Badge, Heart } from "@/components/brand";
 import { buttonStyles } from "@/components/button";
 import { goalTheme } from "@/components/goal-theme";
+import { MealCarousel, type HeroSlide } from "@/components/hero/meal-carousel";
 import { MealCard } from "@/components/meal-card";
 import { meals } from "@/lib/catalog/data";
 import type { Goal } from "@/lib/nutrition/schema";
-import cover from "@/public/images/cover.jpg";
+import meal1 from "@/public/images/hero/meal-1.png";
+import meal2 from "@/public/images/hero/meal-2.png";
+
+/**
+ * Hero slideshow. To add a meal, drop a transparent PNG in public/images/hero and list it here.
+ * Nutrition figures are placeholders until the real recipes are costed.
+ */
+const heroSlides: HeroSlide[] = [
+  {
+    image: meal1,
+    alt: "grilled chicken salad box with a kcal protein shake",
+    name: "grilled chicken power box",
+    calories: 620,
+    proteinG: 52,
+    carbsG: 48,
+    fatG: 22,
+    href: "/plans",
+  },
+  {
+    image: meal2,
+    alt: "plant-based tofu and chickpea box with a kcal plant protein shake",
+    name: "plant-based feast",
+    calories: 580,
+    proteinG: 34,
+    carbsG: 62,
+    fatG: 20,
+    href: "/plans",
+  },
+];
 
 const steps = [
   { title: "tell us about you", text: "Goal, height, weight, gym days. 30 seconds." },
@@ -29,48 +57,28 @@ const container = "mx-auto max-w-6xl px-4 sm:px-6";
 const sectionTitle = "text-[clamp(2.5rem,6vw,4.5rem)]";
 
 /**
- * Home page: colour-blocked sections alternating brand colour and cream.
+ * Home page: a deep green hero with the meal slideshow standing on a drifting
+ * pattern floor, then colour-blocked sections alternating brand colour and cream.
  * @returns The landing screen.
  */
 export default function HomePage() {
   return (
     <main>
-      <section className="slant-b bg-brand text-cream">
-        <div className={`${container} flex flex-col gap-8 pt-8 sm:pt-12`}>
-          <div className="animate-rise flex flex-col items-start gap-6">
-            <Badge>now delivering to sliit campus</Badge>
-            <h1 className="text-[clamp(3rem,9vw,8rem)]">
-              meals matched to <span className="text-accent">your body.</span>
-            </h1>
-            <p className="max-w-md text-lg text-cream/80">
-              3 healthy meals a day, made for your goal and delivered to you.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link href="/calculator" className={buttonStyles("primary", "lg")}>
-                find my plan <Arrow />
-              </Link>
-              <Link href="/plans" className={buttonStyles("light", "lg")}>
-                see plans
-              </Link>
-            </div>
-          </div>
-          <div className="animate-rise overflow-hidden rounded-[2rem] [animation-delay:120ms]">
-            <div className="mask-slant relative aspect-[4/3] sm:aspect-[2.3/1]">
-              <Image
-                src={cover}
-                alt="kcal meal boxes"
-                fill
-                priority
-                placeholder="blur"
-                sizes="(min-width: 1152px) 1104px, 100vw"
-                className="object-cover object-[72%_center]"
-              />
-            </div>
-          </div>
+      <section className="relative isolate h-(--hero-h) overflow-hidden bg-brand-deep [--hero-h:max(36rem,min(100svh,calc(50vw+30rem)))]">
+        <h1 className="sr-only">kcal: meals matched to your body, delivered daily</h1>
+        <div
+          aria-hidden
+          className="pattern-drift absolute inset-x-0 bottom-0 opacity-50 [--tile-h:calc(var(--hero-h)*0.22)]"
+        />
+        <div className="absolute inset-x-0 top-14 bottom-[23%] sm:top-16">
+          <MealCarousel slides={heroSlides} />
         </div>
       </section>
 
-      <section className={`${container} reveal flex flex-col gap-8 py-16`}>
+      <section
+        id="how-it-works"
+        className={`${container} reveal flex scroll-mt-24 flex-col gap-8 py-16`}
+      >
         <h2 className={sectionTitle}>how it works</h2>
         <ol className="grid gap-4 sm:grid-cols-3">
           {steps.map((s, i) => (
@@ -124,8 +132,8 @@ export default function HomePage() {
       </section>
 
       <section className={container}>
-        <div className="reveal relative flex flex-col items-start gap-6 overflow-hidden rounded-[2.5rem] bg-accent p-8 text-brand sm:p-12">
-          <Heart className="absolute -right-6 -bottom-10 size-48 -rotate-12 text-brand/10 sm:size-64" />
+        <div className="reveal relative flex flex-col items-start gap-6 overflow-hidden rounded-[2.5rem] bg-accent p-8 text-brand-deep sm:p-12">
+          <Heart className="absolute -right-6 -bottom-10 size-48 -rotate-12 text-brand-deep/10 sm:size-64" />
           <h2 className="text-[clamp(2.5rem,7vw,5rem)]">ready in 30 seconds.</h2>
           <p className="text-lg">Answer 4 questions. Get your plan.</p>
           <Link href="/calculator" className={buttonStyles("dark", "lg")}>

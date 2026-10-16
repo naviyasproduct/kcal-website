@@ -14,7 +14,7 @@ const links = [
  */
 export function SiteFooter() {
   return (
-    <footer className="slant-t mt-24 bg-brand text-cream">
+    <footer className="slant-t mt-24 bg-brand-deep text-cream">
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 pb-12 sm:flex-row sm:items-end sm:justify-between sm:px-6">
         <div className="flex flex-col gap-3">
           <Logo className="h-14 w-auto self-start" />

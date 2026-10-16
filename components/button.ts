@@ -2,7 +2,7 @@ const base =
   "inline-flex items-center justify-center gap-2 rounded-full font-display lowercase tracking-[-0.02em] transition-transform duration-300 ease-bounce hover:scale-[1.04] active:scale-[0.96] disabled:pointer-events-none disabled:opacity-60";
 
 const variants = {
-  primary: "bg-accent text-brand",
+  primary: "bg-accent text-brand-deep",
   dark: "bg-brand text-cream",
   light: "bg-cream text-brand",
 } as const;

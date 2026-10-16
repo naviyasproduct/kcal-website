@@ -230,7 +230,9 @@ function Choice({
       type="button"
       onClick={onClick}
       className={`group relative rounded-[1.5rem] p-5 text-left transition-[background-color,color,transform] duration-300 ease-bounce hover:scale-[1.03] active:scale-[0.97] ${
-        selected ? "bg-brand text-cream" : "bg-cream-deep text-ink hover:bg-accent hover:text-brand"
+        selected
+          ? "bg-brand text-cream"
+          : "bg-cream-deep text-ink hover:bg-accent hover:text-brand-deep"
       }`}
     >
       <Heart

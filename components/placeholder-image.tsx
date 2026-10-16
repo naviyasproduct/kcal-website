@@ -6,7 +6,7 @@ const ratios = {
 } as const;
 
 const tones = {
-  accent: "bg-accent text-brand/25",
+  accent: "bg-accent text-brand-deep/25",
   brand: "bg-brand text-cream/25",
   soft: "bg-brand-soft text-cream/25",
 } as const;
