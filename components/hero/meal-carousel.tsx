@@ -30,9 +30,9 @@ function loop(slides: HeroSlide[]): HeroSlide[] {
 }
 
 /**
- * Hero slideshow: the centre meal is sharp, its neighbours sit to the sides
- * smaller and blurred, and the centre meal's nutrition and order button sit under
- * it. Slides advance right to left on a timer and follow a drag.
+ * Hero slideshow: each meal carries its nutrition and order button underneath.
+ * The centre meal is sharp, its neighbours sit to the sides smaller and blurred.
+ * Slides advance right to left on a timer and follow a drag.
  * @param props - The meals, in order.
  * @returns The carousel, filling its positioned parent.
  */
@@ -67,7 +67,8 @@ export function MealCarousel({ slides }: { slides: HeroSlide[] }) {
       slideRefs.current.forEach((el, i) => {
         if (!el) return;
         const ratio = items[i].image.width / items[i].image.height;
-        const w = Math.min(width * (narrow ? 0.98 : 0.64), height * ratio);
+        const caption = el.querySelector<HTMLElement>("[data-caption]")?.offsetHeight ?? 0;
+        const w = Math.min(width * (narrow ? 0.98 : 0.64), (height - caption) * ratio);
         el.style.width = `${w}px`;
       });
     };
@@ -130,7 +131,8 @@ export function MealCarousel({ slides }: { slides: HeroSlide[] }) {
     };
 
     const onDown = (e: PointerEvent) => {
-      if (e.button !== 0 || drag) return;
+      // Let the order button take its own click instead of starting a drag.
+      if (e.button !== 0 || drag || (e.target as Element).closest("a")) return;
       stage.setPointerCapture(e.pointerId);
       drag = { id: e.pointerId, x: e.clientX, from: position, vx: 0, t: e.timeStamp };
       window.clearTimeout(timer);
@@ -210,27 +212,20 @@ export function MealCarousel({ slides }: { slides: HeroSlide[] }) {
     if (e.key === "ArrowLeft") nudgeRef.current(-1);
   };
 
-  const shown = items[current];
-  const facts = [
-    { label: "protein", value: `${shown.proteinG}g` },
-    { label: "carbs", value: `${shown.carbsG}g` },
-    { label: "fat", value: `${shown.fatG}g` },
-  ];
-
   return (
     <div
       ref={rootRef}
       role="region"
       aria-roledescription="carousel"
       aria-label="our meals"
-      className="absolute inset-0 flex flex-col"
+      className="absolute inset-0"
     >
       <div
         ref={stageRef}
         tabIndex={0}
         onKeyDown={onKeyDown}
         aria-label="use the arrow keys to browse meals"
-        className="relative flex-1 cursor-grab touch-pan-y select-none data-dragging:cursor-grabbing"
+        className="absolute inset-0 cursor-grab touch-pan-y select-none data-dragging:cursor-grabbing"
       >
         {items.map((slide, i) => (
           <div
@@ -238,62 +233,79 @@ export function MealCarousel({ slides }: { slides: HeroSlide[] }) {
             ref={(el) => {
               slideRefs.current[i] = el;
             }}
-            aria-hidden={i !== current}
+            inert={i !== current}
             className="absolute bottom-0 left-1/2 w-[46%] -translate-x-1/2 will-change-transform"
             style={i === 0 ? undefined : { opacity: 0 }}
           >
-            {/* Hero images are pre-compressed WebP shown near full size on every screen, so
-                they skip the optimizer and come straight from the CDN. */}
-            <Image
-              src={slide.image}
-              alt=""
-              draggable={false}
-              unoptimized
-              loading="eager"
-              className="absolute inset-0 size-full opacity-[var(--soft,0)] blur-md"
-            />
-            <Image
-              src={slide.image}
-              alt={slide.alt}
-              draggable={false}
-              unoptimized
-              preload={i < slides.length}
-              loading={i < slides.length ? undefined : "eager"}
-              className="relative h-auto w-full opacity-[var(--sharp,1)]"
-            />
+            <div className="relative">
+              {/* Hero images are pre-compressed WebP shown near full size on every screen,
+                  so they skip the optimizer and come straight from the CDN. */}
+              <Image
+                src={slide.image}
+                alt=""
+                draggable={false}
+                unoptimized
+                loading="eager"
+                className="absolute inset-0 size-full opacity-[var(--soft,0)] blur-md"
+              />
+              <Image
+                src={slide.image}
+                alt={slide.alt}
+                draggable={false}
+                unoptimized
+                preload={i < slides.length}
+                loading={i < slides.length ? undefined : "eager"}
+                className="relative h-auto w-full opacity-[var(--sharp,1)]"
+              />
+            </div>
+            <MealFacts slide={slide} />
           </div>
         ))}
       </div>
-      <div className="relative z-10 flex shrink-0 justify-center px-4 pt-3 pb-2">
-        <div
-          key={current}
-          className="flex animate-rise flex-col items-center gap-4 text-cream sm:flex-row sm:gap-8"
-        >
-          <div className="flex flex-col items-center gap-2 sm:items-start">
-            <p className="font-display text-lg leading-tight tracking-[-0.02em] lowercase sm:text-xl">
-              {shown.name}
-            </p>
-            <dl className="flex items-end gap-5">
-              <div className="flex flex-col-reverse">
-                <dt className="text-xs text-cream/70">calories</dt>
-                <dd className="font-display text-2xl leading-none text-accent">
-                  {shown.calories}
-                  <span className="ml-1 font-sans text-xs font-bold">kcal</span>
-                </dd>
-              </div>
-              {facts.map((f) => (
-                <div key={f.label} className="flex flex-col-reverse">
-                  <dt className="text-xs text-cream/70">{f.label}</dt>
-                  <dd className="font-display text-lg leading-tight">{f.value}</dd>
-                </div>
-              ))}
-            </dl>
+    </div>
+  );
+}
+
+/**
+ * Name, nutrition and order button under a hero meal. Blurs along with the image
+ * as the meal moves to the side.
+ * @param props - The meal.
+ * @returns The caption block.
+ */
+function MealFacts({ slide }: { slide: HeroSlide }) {
+  const facts = [
+    { label: "protein", value: `${slide.proteinG}g` },
+    { label: "carbs", value: `${slide.carbsG}g` },
+    { label: "fat", value: `${slide.fatG}g` },
+  ];
+  return (
+    <div
+      data-caption
+      className="flex flex-col items-center justify-center gap-4 pt-3 text-cream blur-[calc((1-var(--sharp,1))*5px)] sm:flex-row sm:gap-8"
+    >
+      <div className="flex flex-col items-center gap-2 sm:items-start">
+        <p className="font-display text-lg leading-tight tracking-[-0.02em] lowercase sm:text-xl">
+          {slide.name}
+        </p>
+        <dl className="flex items-end gap-5">
+          <div className="flex flex-col-reverse">
+            <dt className="text-xs text-cream/70">calories</dt>
+            <dd className="font-display text-2xl leading-none text-accent">
+              {slide.calories}
+              <span className="ml-1 font-sans text-xs font-bold">kcal</span>
+            </dd>
           </div>
-          <Link href={shown.href} className={buttonStyles("primary")}>
-            order now <Arrow className="size-4" />
-          </Link>
-        </div>
+          {facts.map((f) => (
+            <div key={f.label} className="flex flex-col-reverse">
+              <dt className="text-xs text-cream/70">{f.label}</dt>
+              <dd className="font-display text-lg leading-tight">{f.value}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
+      <Link href={slide.href} draggable={false} className={buttonStyles("primary")}>
+        order now <Arrow className="size-4" />
+      </Link>
     </div>
   );
 }
