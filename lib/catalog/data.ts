@@ -157,8 +157,8 @@ export const plans: Plan[] = planBases.flatMap((base) => [
   },
 ]);
 
+/** Where a plan can be delivered. Checkout only shows a picker when there is more than one. */
 export const deliveryLocations: DeliveryLocation[] = [
-  { id: "sliit", name: "SLIIT campus", type: "campus" },
   { id: "address", name: "My address", type: "address" },
 ];
 

@@ -23,7 +23,7 @@ export function CheckoutForm({ initialPlan, minDate }: { initialPlan: Plan; minD
   const [values, setValues] = useState({
     name: "",
     phone: "",
-    locationId: "sliit",
+    locationId: deliveryLocations[0].id,
     addressLine: "",
     startDate: minDate,
   });
@@ -75,21 +75,23 @@ export function CheckoutForm({ initialPlan, minDate }: { initialPlan: Plan; minD
       </section>
 
       <Group title="deliver to">
-        <div className="grid grid-cols-2 gap-3">
-          {deliveryLocations.map((l) => (
-            <button
-              key={l.id}
-              type="button"
-              onClick={() => set("locationId", l.id)}
-              aria-pressed={values.locationId === l.id}
-              className={`h-16 rounded-[1.25rem] font-display tracking-[-0.02em] lowercase transition-[background-color,color,transform] duration-300 ease-bounce hover:scale-[1.03] active:scale-[0.97] ${
-                values.locationId === l.id ? "bg-brand text-cream" : "bg-cream-deep text-ink"
-              }`}
-            >
-              {l.name}
-            </button>
-          ))}
-        </div>
+        {deliveryLocations.length > 1 && (
+          <div className="grid grid-cols-2 gap-3">
+            {deliveryLocations.map((l) => (
+              <button
+                key={l.id}
+                type="button"
+                onClick={() => set("locationId", l.id)}
+                aria-pressed={values.locationId === l.id}
+                className={`h-16 rounded-[1.25rem] font-display tracking-[-0.02em] lowercase transition-[background-color,color,transform] duration-300 ease-bounce hover:scale-[1.03] active:scale-[0.97] ${
+                  values.locationId === l.id ? "bg-brand text-cream" : "bg-cream-deep text-ink"
+                }`}
+              >
+                {l.name}
+              </button>
+            ))}
+          </div>
+        )}
         <div
           className={`grid transition-[grid-template-rows,opacity] duration-500 ease-bounce ${
             values.locationId === "address"

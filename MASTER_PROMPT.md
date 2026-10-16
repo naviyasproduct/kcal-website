@@ -112,7 +112,7 @@ The site holds personal and body data. Treat it as sensitive.
 - `Meal` — name, slug, description, imageUrl, calories, proteinG, carbsG, saltG, mealType (`breakfast` | `lunch` | `dinner`), active
 - `Product` — name, slug, imageUrl, price, calories, proteinG, carbsG, saltG, active
 - `Plan` — name, goal, billingPeriod (`weekly` | `monthly`), price, calorieMin, calorieMax, active
-- `DeliveryLocation` — name (first row: SLIIT campus), type (`campus` | `address`), active
+- `DeliveryLocation` — name, type (`campus` | `address`), active. Not tied to any one campus; the site never names a specific university.
 - `Subscription` — userId, planId, deliveryLocationId, addressLine, startDate, status (`pending` | `active` | `paused` | `cancelled`), renewsAt
 - `Order` — userId, subscriptionId, total, paymentMethod, paymentStatus, createdAt
 - `OrderItem` — orderId, productId, quantity, unitPrice

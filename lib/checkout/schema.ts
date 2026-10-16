@@ -24,7 +24,7 @@ export function checkoutSchema(minDate: string) {
         .string()
         .trim()
         .regex(/^(?:\+94|0)7\d{8}$/, "Use a mobile number like 0771234567"),
-      locationId: z.enum(["sliit", "address"], { error: "Pick where to deliver" }),
+      locationId: z.enum(["address"], { error: "Pick where to deliver" }),
       addressLine: z.string().trim().max(200),
       startDate: z
         .string()

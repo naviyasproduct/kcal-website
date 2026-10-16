@@ -35,7 +35,7 @@ export default function MealsPage() {
         {sections.map((s) => (
           <section key={s.type} id={s.type} className="flex scroll-mt-28 flex-col gap-6">
             <h2 className="reveal text-[clamp(2.5rem,6vw,4rem)]">{s.title}</h2>
-            <div className="grid gap-5 sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5">
               {meals
                 .filter((m) => m.mealType === s.type)
                 .map((m) => (

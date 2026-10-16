@@ -16,27 +16,28 @@ export function MealCard({ meal }: { meal: Meal }) {
     { label: "salt", value: `${meal.saltG}g` },
   ];
   return (
-    <article className="group relative overflow-hidden rounded-[2rem] bg-cream-deep transition-transform duration-300 ease-bounce hover:scale-[1.03]">
+    <article className="group relative overflow-hidden rounded-[1.5rem] bg-cream-deep sm:rounded-[2rem] transition-transform duration-300 ease-bounce hover:scale-[1.03]">
       <PlaceholderImage
         ratio="wide"
         label={meal.name}
         tone={toneByType[meal.mealType]}
         className="mask-slant-b"
       />
-      <span className="absolute top-4 right-4 grid size-10 scale-0 place-items-center rounded-full bg-cream text-brand transition-transform duration-300 ease-bounce group-hover:scale-100">
+      <span className="absolute top-3 right-3 grid size-9 scale-0 sm:top-4 sm:right-4 sm:size-10 place-items-center rounded-full bg-cream text-brand transition-transform duration-300 ease-bounce group-hover:scale-100">
         <Heart className="size-5" />
       </span>
-      <div className="flex flex-col gap-4 p-5 pt-1">
-        <div className="flex flex-col items-start gap-3">
+      <div className="flex flex-col gap-3 p-3.5 pt-1 sm:gap-4 sm:p-5 sm:pt-1">
+        <div className="flex flex-col items-start gap-2 sm:gap-3">
           <Badge tone="brand">{meal.mealType}</Badge>
-          <h3 className="text-xl">{meal.name}</h3>
+          <h3 className="text-base sm:text-xl">{meal.name}</h3>
         </div>
-        <div className="flex items-end justify-between gap-3">
-          <p className="font-display text-4xl leading-none tracking-[-0.03em]">
+        {/* Half-width cards on phones stack calories above the macros. */}
+        <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-3">
+          <p className="font-display text-3xl leading-none tracking-[-0.03em] sm:text-4xl">
             {meal.calories}
             <span className="ml-1 font-sans text-sm font-bold tracking-normal">kcal</span>
           </p>
-          <dl className="flex gap-3 text-right">
+          <dl className="flex gap-3 sm:text-right">
             {facts.map((f) => (
               <div key={f.label} className="flex flex-col-reverse">
                 <dt className="text-xs text-ink-muted">{f.label}</dt>

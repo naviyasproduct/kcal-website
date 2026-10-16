@@ -44,7 +44,7 @@ const heroSlides: HeroSlide[] = [
 const steps = [
   { title: "tell us about you", text: "Goal, height, weight, gym days. 30 seconds." },
   { title: "get your plan", text: "Calories and macros matched to your body." },
-  { title: "eat well, daily", text: "3 fresh meals delivered to campus or home." },
+  { title: "eat well, daily", text: "3 fresh meals delivered to your door." },
 ];
 
 /** Goal tiles. Characters are cut-outs from media/hero, standing in front of the title. */
@@ -55,7 +55,13 @@ const goalCards: { goal: Goal; title: string; image: StaticImageData }[] = [
   { goal: "healthy", title: "just eat healthy", image: goalHealthy },
 ];
 
-const featured = ["kurakkan-roti-egg", "chicken-red-rice", "light-chicken-kottu"]
+/** Home menu teaser: a 2×2 grid on phones, the first three in a row from `sm` up. */
+const featured = [
+  "kurakkan-roti-egg",
+  "chicken-red-rice",
+  "light-chicken-kottu",
+  "fish-ambul-thiyal",
+]
   .map((slug) => meals.find((m) => m.slug === slug))
   .filter((m) => m !== undefined);
 
@@ -141,7 +147,7 @@ export default function HomePage() {
             all meals <Arrow className="size-4" />
           </Link>
         </div>
-        <div className="grid gap-5 sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 sm:[&>*:nth-child(n+4)]:hidden">
           {featured.map((m) => (
             <MealCard key={m.slug} meal={m} />
           ))}
