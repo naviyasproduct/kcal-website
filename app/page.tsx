@@ -1,3 +1,4 @@
+import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { Arrow, Badge, Heart } from "@/components/brand";
 import { buttonStyles } from "@/components/button";
@@ -8,6 +9,10 @@ import { meals } from "@/lib/catalog/data";
 import type { Goal } from "@/lib/nutrition/schema";
 import meal1 from "@/public/images/hero/meal-1.webp";
 import meal2 from "@/public/images/hero/meal-2.webp";
+import goalBulk from "@/public/images/goals/bulk.webp";
+import goalCut from "@/public/images/goals/cut.webp";
+import goalHealthy from "@/public/images/goals/healthy.webp";
+import goalMaintain from "@/public/images/goals/maintain.webp";
 
 /**
  * Hero slideshow. To add a meal, drop a transparent WebP in public/images/hero (master PNGs live in media/hero) and list it here.
@@ -42,11 +47,12 @@ const steps = [
   { title: "eat well, daily", text: "3 fresh meals delivered to campus or home." },
 ];
 
-const goalCards: { goal: Goal; title: string }[] = [
-  { goal: "bulk", title: "build muscle" },
-  { goal: "cut", title: "lose fat" },
-  { goal: "maintain", title: "stay in shape" },
-  { goal: "healthy", title: "just eat healthy" },
+/** Goal tiles. Characters are cut-outs from media/hero, standing in front of the title. */
+const goalCards: { goal: Goal; title: string; image: StaticImageData }[] = [
+  { goal: "bulk", title: "build muscle", image: goalBulk },
+  { goal: "cut", title: "lose fat", image: goalCut },
+  { goal: "maintain", title: "stay in shape", image: goalMaintain },
+  { goal: "healthy", title: "just eat healthy", image: goalHealthy },
 ];
 
 const featured = ["kurakkan-roti-egg", "chicken-red-rice", "light-chicken-kottu"]
@@ -101,11 +107,22 @@ export default function HomePage() {
               <Link
                 key={g.goal}
                 href={`/calculator?goal=${g.goal}`}
-                className={`group relative flex aspect-square flex-col justify-between rounded-[2rem] p-5 transition-transform duration-300 ease-bounce hover:scale-[1.04] active:scale-[0.97] sm:p-6 ${goalTheme[g.goal].block}`}
+                className={`group relative isolate aspect-[4/5] overflow-hidden rounded-[2rem] transition-transform duration-300 ease-bounce hover:scale-[1.04] active:scale-[0.97] ${goalTheme[g.goal].block}`}
               >
-                <Heart className="absolute top-5 right-5 size-6 scale-0 transition-transform duration-300 ease-bounce group-hover:scale-100" />
-                <h3 className="text-[clamp(1.5rem,3.5vw,2.25rem)]">{g.title}</h3>
-                <span className="grid size-12 place-items-center self-end rounded-full bg-current/15 transition-transform duration-300 ease-bounce group-hover:translate-x-1">
+                {/* The title sits behind the character, which overlaps its lower half. */}
+                <h3 className="relative p-4 text-[clamp(1.6rem,3.5vw,2.75rem)] leading-[0.92] sm:p-5">
+                  {g.title}
+                </h3>
+                <Image
+                  src={g.image}
+                  alt=""
+                  sizes="(min-width: 1024px) 22vw, 45vw"
+                  className="absolute inset-x-0 -bottom-[4%] z-10 mx-auto h-[76%] w-auto origin-bottom lg:h-[80%] transition-transform duration-500 ease-bounce group-hover:scale-[1.06]"
+                />
+                <Heart className="absolute top-4 right-4 z-20 size-6 scale-0 transition-transform duration-300 ease-bounce group-hover:scale-100 sm:top-5 sm:right-5" />
+                <span
+                  className={`absolute right-3 bottom-3 z-20 grid size-10 place-items-center rounded-full transition-transform duration-300 ease-bounce group-hover:translate-x-1 sm:right-4 sm:bottom-4 sm:size-12 ${goalTheme[g.goal].badge}`}
+                >
                   <Arrow />
                 </span>
               </Link>
