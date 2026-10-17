@@ -16,8 +16,12 @@ describe("parseEnv", () => {
     expect(parseEnv(valid).DATABASE_URL).toBe(valid.DATABASE_URL);
   });
 
-  it("rejects a missing variable and names it", () => {
-    expect(() => parseEnv({ ...valid, AUTH_SECRET: undefined })).toThrow(/AUTH_SECRET/);
+  it("allows variables for features that are not built yet to be missing", () => {
+    expect(parseEnv({ NODE_ENV: "production" }).DATABASE_URL).toBeUndefined();
+  });
+
+  it("still rejects a variable that is set but invalid, and names it", () => {
+    expect(() => parseEnv({ NODE_ENV: "production", APP_URL: "not a url" })).toThrow(/APP_URL/);
   });
 
   it("rejects a short AUTH_SECRET", () => {
