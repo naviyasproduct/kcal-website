@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, type FormEvent, type ReactNode } from "react";
-import { plans } from "@/lib/catalog/data";
+import { meals, plans, type Meal } from "@/lib/catalog/data";
 import { calculate, type NutritionResult } from "@/lib/nutrition/calculate";
+import { matchDay, type DayPlan } from "@/lib/nutrition/match-day";
 import { calculatorInputSchema, type Goal, type Sex } from "@/lib/nutrition/schema";
 import { Arrow, Heart } from "./brand";
 import { buttonStyles } from "./button";
@@ -44,6 +45,7 @@ export function CalculatorForm({ initialGoal }: { initialGoal?: Goal }) {
   });
   const [errors, setErrors] = useState<Partial<Record<BodyField, string>>>({});
   const [result, setResult] = useState<NutritionResult>();
+  const [day, setDay] = useState<DayPlan<Meal> | null>(null);
 
   function go(next: number) {
     setStep(next);
@@ -74,7 +76,9 @@ export function CalculatorForm({ initialGoal }: { initialGoal?: Goal }) {
   function pickGymDays(days: number) {
     const parsed = parseBody();
     if (!goal || !sex || !parsed.success) return go(0);
-    setResult(calculate({ goal, sex, gymDaysPerWeek: days, ...parsed.data }, weeklyPlans));
+    const next = calculate({ goal, sex, gymDaysPerWeek: days, ...parsed.data }, weeklyPlans);
+    setResult(next);
+    setDay(matchDay(next, meals));
     go(4);
   }
 
@@ -83,6 +87,7 @@ export function CalculatorForm({ initialGoal }: { initialGoal?: Goal }) {
       <ResultView
         result={result}
         plan={weeklyPlans.find((p) => p.id === result.recommendedPlanId)}
+        day={day}
         onEdit={() => go(0)}
       />
     );

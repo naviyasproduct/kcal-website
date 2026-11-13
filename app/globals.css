@@ -69,20 +69,52 @@
   }
 }
 
-/* Full-width colour block with a slanted bottom / top edge, echoing the cuts in the logo. */
+/*
+ * Full-width colour block with a slanted bottom / top edge, echoing the cuts in the logo.
+ * Give the colour with a before: class, e.g. `slant-y before:bg-brand`.
+ *
+ * Only the ::before background is cut to shape; the block and its content are never
+ * clipped. Clipping the whole block made Chrome composite the clip as a separate mask
+ * whenever content inside animated (the scroll reveals), and a thin line flashed along
+ * the slanted edge while scrolling.
+ */
 @utility slant-b {
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), 0 100%);
+  position: relative;
+  isolation: isolate;
   padding-bottom: calc(var(--cut) + 2.5rem);
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), 0 100%);
+  }
 }
 
 @utility slant-t {
-  clip-path: polygon(0 var(--cut), 100% 0, 100% 100%, 0 100%);
+  position: relative;
+  isolation: isolate;
   padding-top: calc(var(--cut) + 2.5rem);
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    clip-path: polygon(0 var(--cut), 100% 0, 100% 100%, 0 100%);
+  }
 }
 
 @utility slant-y {
-  clip-path: polygon(0 var(--cut), 100% 0, 100% calc(100% - var(--cut)), 0 100%);
+  position: relative;
+  isolation: isolate;
   padding-block: calc(var(--cut) + 2.5rem);
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    clip-path: polygon(0 var(--cut), 100% 0, 100% calc(100% - var(--cut)), 0 100%);
+  }
 }
 
 /* Photo masks with one slanted side. */
@@ -148,7 +180,8 @@ h3 {
 
 .bg-brand-deep :focus-visible,
 .bg-brand :focus-visible,
-.bg-brand-soft :focus-visible {
+.bg-brand-soft :focus-visible,
+[class*="before:bg-brand"] :focus-visible {
   outline-color: var(--color-accent);
 }
 

@@ -1,7 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import type { Plan } from "@/lib/catalog/data";
+import type { Meal, Plan } from "@/lib/catalog/data";
 import type { NutritionResult } from "@/lib/nutrition/calculate";
+import type { DayPlan } from "@/lib/nutrition/match-day";
 import { formatLkr } from "@/lib/format";
 import { Arrow, Badge, Heart } from "./brand";
 import { buttonStyles } from "./button";
@@ -11,16 +13,18 @@ const RING = 2 * Math.PI * 52;
 type ResultViewProps = {
   result: NutritionResult;
   plan: Plan | undefined;
+  /** A sample day of menu meals sized to the targets, from `matchDay`. */
+  day: DayPlan<Meal> | null;
   onEdit?: () => void;
 };
 
 /**
  * Result screen shared by the calculator and (later) the chatbot.
  * One main action: subscribe to the recommended plan.
- * @param props - Targets, recommended plan and an optional edit handler.
+ * @param props - Targets, recommended plan, sample day and an optional edit handler.
  * @returns The result screen.
  */
-export function ResultView({ result, plan, onEdit }: ResultViewProps) {
+export function ResultView({ result, plan, day, onEdit }: ResultViewProps) {
   const macroKcal = result.proteinG * 4 + result.carbsG * 4 + result.fatG * 9;
   const macros = [
     {
@@ -100,6 +104,8 @@ export function ResultView({ result, plan, onEdit }: ResultViewProps) {
         ))}
       </section>
 
+      {day && <SampleDay day={day} target={result} />}
+
       {plan && (
         <section className="animate-rise flex flex-col gap-5 rounded-[2rem] bg-cream-deep p-6 [animation-delay:260ms]">
           <div className="flex items-start justify-between gap-3">
@@ -136,5 +142,54 @@ export function ResultView({ result, plan, onEdit }: ResultViewProps) {
         <p className="text-sm text-ink-muted">This is an estimate, not medical advice.</p>
       </div>
     </div>
+  );
+}
+
+/** One breakfast, lunch and dinner from the menu with portion sizes, and the day's totals next to the target. */
+function SampleDay({ day, target }: { day: DayPlan<Meal>; target: NutritionResult }) {
+  const summary = [
+    { label: "day total", values: day.totals },
+    { label: "your target", values: target },
+  ];
+  return (
+    <section className="animate-rise flex flex-col gap-4 rounded-[2rem] bg-cream-deep p-5 [animation-delay:200ms] sm:p-6">
+      <h2 className="text-3xl">your day on kcal</h2>
+      <ul className="flex flex-col gap-3">
+        {day.items.map((item) => (
+          <li key={item.meal.slug} className="flex items-center gap-3">
+            <div className="relative size-16 shrink-0 overflow-hidden rounded-2xl bg-brand-deep sm:size-20">
+              <Image src={item.meal.imageUrl} alt="" fill sizes="80px" className="object-cover" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-bold text-ink-muted">{item.meal.mealType}</p>
+              <p className="font-display leading-tight tracking-[-0.03em] lowercase sm:text-lg">
+                {item.meal.name}
+              </p>
+            </div>
+            <div className="shrink-0 text-right">
+              <p className="font-display tracking-[-0.03em] tabular-nums">
+                {item.calories.toLocaleString()} kcal
+              </p>
+              <p className="text-sm text-ink-muted tabular-nums">
+                {item.portion}× · {item.proteinG}g protein
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <dl className="grid grid-cols-2 gap-3 border-t-2 border-ink/10 pt-4">
+        {summary.map((s) => (
+          <div key={s.label} className="flex flex-col">
+            <dt className="text-sm text-ink-muted">{s.label}</dt>
+            <dd className="font-display text-2xl tracking-[-0.03em] tabular-nums">
+              {s.values.calories.toLocaleString()} kcal
+            </dd>
+            <dd className="text-sm tabular-nums">
+              {s.values.proteinG}g protein · {s.values.carbsG}g carbs · {s.values.fatG}g fat
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </section>
   );
 }

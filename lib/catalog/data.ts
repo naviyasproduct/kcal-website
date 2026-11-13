@@ -8,13 +8,19 @@ import type { Goal } from "@/lib/nutrition/schema";
 export type MealType = "breakfast" | "lunch" | "dinner";
 export type BillingPeriod = "weekly" | "monthly";
 
+/**
+ * One meal at its regular (1×) portion. `fatG` is not shown on the menu, but the
+ * calculator needs it to size a day of meals to the customer's fat target.
+ */
 export type Meal = {
   slug: string;
   name: string;
   mealType: MealType;
+  imageUrl: string;
   calories: number;
   proteinG: number;
   carbsG: number;
+  fatG: number;
   saltG: number;
 };
 
@@ -31,87 +37,110 @@ export type Plan = {
 
 export type DeliveryLocation = { id: string; name: string; type: "campus" | "address" };
 
+/*
+ * Menu built from the photos in media/meals-images (cropped WebPs in public/images/meals).
+ * Nutrition figures are estimates for a regular portion until the real recipes are costed;
+ * each one is consistent with 4/4/9 kcal per gram of protein/carbs/fat.
+ */
 export const meals: Meal[] = [
   {
-    slug: "kurakkan-roti-egg",
-    name: "Kurakkan roti & egg curry",
+    slug: "egg-scramble-bowl",
+    name: "Veggie egg scramble & brown rice",
     mealType: "breakfast",
-    calories: 480,
-    proteinG: 26,
-    carbsG: 52,
-    saltG: 1.1,
-  },
-  {
-    slug: "oats-banana-pb",
-    name: "Oats, banana & peanut butter",
-    mealType: "breakfast",
-    calories: 520,
-    proteinG: 22,
-    carbsG: 68,
-    saltG: 0.3,
-  },
-  {
-    slug: "string-hoppers-dhal",
-    name: "Red string hoppers & dhal",
-    mealType: "breakfast",
-    calories: 430,
-    proteinG: 18,
-    carbsG: 70,
-    saltG: 0.9,
-  },
-  {
-    slug: "chicken-red-rice",
-    name: "Chicken, red rice & gotukola",
-    mealType: "lunch",
-    calories: 640,
-    proteinG: 48,
-    carbsG: 72,
-    saltG: 1.4,
-  },
-  {
-    slug: "fish-ambul-thiyal",
-    name: "Fish ambul thiyal & brown rice",
-    mealType: "lunch",
-    calories: 590,
-    proteinG: 44,
-    carbsG: 64,
-    saltG: 1.6,
-  },
-  {
-    slug: "chickpea-veg-bowl",
-    name: "Chickpea & veg rice bowl",
-    mealType: "lunch",
-    calories: 560,
+    imageUrl: "/images/meals/egg-scramble-bowl.webp",
+    calories: 445,
     proteinG: 24,
-    carbsG: 82,
+    carbsG: 44,
+    fatG: 19,
     saltG: 1.0,
   },
   {
-    slug: "light-chicken-kottu",
-    name: "Light chicken kottu",
-    mealType: "dinner",
-    calories: 610,
-    proteinG: 42,
-    carbsG: 66,
-    saltG: 1.7,
+    slug: "chicken-salad-box",
+    name: "Grilled chicken salad box",
+    mealType: "breakfast",
+    imageUrl: "/images/meals/chicken-salad-box.webp",
+    calories: 430,
+    proteinG: 46,
+    carbsG: 30,
+    fatG: 14,
+    saltG: 1.1,
   },
   {
-    slug: "tuna-veg-rice",
-    name: "Tuna & veg red rice",
-    mealType: "dinner",
-    calories: 540,
-    proteinG: 40,
-    carbsG: 58,
+    slug: "tuna-salad-bowl",
+    name: "Tuna salad bowl",
+    mealType: "breakfast",
+    imageUrl: "/images/meals/tuna-salad-bowl.webp",
+    calories: 480,
+    proteinG: 39,
+    carbsG: 50,
+    fatG: 14,
+    saltG: 1.3,
+  },
+  {
+    slug: "chicken-rice-bowl",
+    name: "Chicken rice bowl",
+    mealType: "lunch",
+    imageUrl: "/images/meals/chicken-rice-bowl.webp",
+    calories: 610,
+    proteinG: 55,
+    carbsG: 55,
+    fatG: 19,
+    saltG: 1.4,
+  },
+  {
+    slug: "spiced-chicken-mince",
+    name: "Spiced chicken mince & rice",
+    mealType: "lunch",
+    imageUrl: "/images/meals/spiced-chicken-mince.webp",
+    calories: 610,
+    proteinG: 49,
+    carbsG: 68,
+    fatG: 16,
+    saltG: 1.5,
+  },
+  {
+    slug: "pepper-salmon-rice",
+    name: "Pepper salmon & rice",
+    mealType: "lunch",
+    imageUrl: "/images/meals/pepper-salmon-rice.webp",
+    calories: 640,
+    proteinG: 42,
+    carbsG: 70,
+    fatG: 21,
     saltG: 1.2,
   },
   {
-    slug: "soy-curry-hoppers",
-    name: "Soy curry & string hoppers",
+    slug: "grilled-chicken-veg-rice",
+    name: "Grilled chicken & veg rice",
     mealType: "dinner",
-    calories: 500,
-    proteinG: 32,
+    imageUrl: "/images/meals/grilled-chicken-veg-rice.webp",
+    calories: 570,
+    proteinG: 48,
     carbsG: 60,
+    fatG: 15,
     saltG: 1.3,
+  },
+  {
+    slug: "chickpea-curry-rice",
+    name: "Chickpea curry & rice",
+    mealType: "dinner",
+    imageUrl: "/images/meals/chickpea-curry-rice.webp",
+    calories: 620,
+    proteinG: 23,
+    carbsG: 100,
+    fatG: 14,
+    saltG: 1.2,
+  },
+  {
+    slug: "veggie-power-meal",
+    name: "Veggie power meal",
+    mealType: "dinner",
+    imageUrl: "/images/meals/veggie-power-meal.webp",
+    calories: 560,
+    proteinG: 22,
+    carbsG: 88,
+    fatG: 13,
+    saltG: 1.0,
   },
 ];
 

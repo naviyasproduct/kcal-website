@@ -57,10 +57,10 @@ const goalCards: { goal: Goal; title: string; image: StaticImageData }[] = [
 
 /** Home menu teaser: a 2×2 grid on phones, the first three in a row from `sm` up. */
 const featured = [
-  "kurakkan-roti-egg",
-  "chicken-red-rice",
-  "light-chicken-kottu",
-  "fish-ambul-thiyal",
+  "chicken-rice-bowl",
+  "pepper-salmon-rice",
+  "veggie-power-meal",
+  "egg-scramble-bowl",
 ]
   .map((slug) => meals.find((m) => m.slug === slug))
   .filter((m) => m !== undefined);
@@ -105,7 +105,7 @@ export default function HomePage() {
         </ol>
       </section>
 
-      <section className="slant-y bg-brand text-cream">
+      <section className="slant-y before:bg-brand text-cream">
         <div className={`${container} reveal flex flex-col gap-8`}>
           <h2 className={sectionTitle}>what&apos;s your goal?</h2>
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">

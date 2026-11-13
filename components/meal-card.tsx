@@ -1,8 +1,6 @@
+import Image from "next/image";
 import type { Meal } from "@/lib/catalog/data";
 import { Badge, Heart } from "./brand";
-import { PlaceholderImage } from "./placeholder-image";
-
-const toneByType = { breakfast: "accent", lunch: "soft", dinner: "brand" } as const;
 
 /**
  * Meal block with a slant-cut photo and nutrition facts.
@@ -17,12 +15,15 @@ export function MealCard({ meal }: { meal: Meal }) {
   ];
   return (
     <article className="group relative overflow-hidden rounded-[1.5rem] bg-cream-deep sm:rounded-[2rem] transition-transform duration-300 ease-bounce hover:scale-[1.03]">
-      <PlaceholderImage
-        ratio="wide"
-        label={meal.name}
-        tone={toneByType[meal.mealType]}
-        className="mask-slant-b"
-      />
+      <div className="mask-slant-b relative aspect-[4/3] bg-brand-deep">
+        <Image
+          src={meal.imageUrl}
+          alt={meal.name}
+          fill
+          sizes="(min-width: 1152px) 360px, (min-width: 640px) 33vw, 50vw"
+          className="object-cover"
+        />
+      </div>
       <span className="absolute top-3 right-3 grid size-9 scale-0 sm:top-4 sm:right-4 sm:size-10 place-items-center rounded-full bg-cream text-brand transition-transform duration-300 ease-bounce group-hover:scale-100">
         <Heart className="size-5" />
       </span>

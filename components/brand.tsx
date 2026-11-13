@@ -75,7 +75,7 @@ export function Badge({
  */
 export function PageHero({ title, children }: { title: string; children?: ReactNode }) {
   return (
-    <section className="slant-b bg-brand text-cream">
+    <section className="slant-b before:bg-brand text-cream">
       <div className="mx-auto flex max-w-6xl flex-col gap-5 px-4 pt-10 sm:px-6">
         <h1 className="animate-rise text-[clamp(3rem,9vw,6.5rem)]">{title}</h1>
         {children}

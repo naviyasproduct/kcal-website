@@ -24,7 +24,7 @@ export default async function CheckoutDonePage({ searchParams }: PageProps<"/che
       : undefined;
 
   return (
-    <main className="slant-b bg-brand text-cream">
+    <main className="slant-b before:bg-brand text-cream">
       <div className="mx-auto flex max-w-xl flex-col items-center gap-6 px-4 pt-16 text-center">
         <Heart className="animate-pop size-28 text-accent" />
         <h1 className="animate-rise text-[clamp(3rem,10vw,6rem)] [animation-delay:120ms]">

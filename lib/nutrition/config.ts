@@ -16,4 +16,16 @@ export const nutritionConfig = {
     heightCm: { min: 120, max: 230 },
     weightKg: { min: 35, max: 250 },
   },
+  /** Sizing a sample day of menu meals to the targets (see `matchDay`). */
+  matching: {
+    /** Portion sizes the kitchen can make, as multiples of a regular meal. */
+    portions: [0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5],
+    /**
+     * How much each squared relative miss counts. Calories matter most. Protein only
+     * counts when it falls short: going over the target is fine.
+     */
+    weights: { calories: 10, proteinShortfall: 4, fat: 0.5, carbs: 0.5 },
+    /** Weight on the squared gap between the largest and smallest portion, for even portions. */
+    portionSpread: 0.4,
+  },
 } as const;
