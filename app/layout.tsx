@@ -1,9 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans, Dela_Gothic_One } from "next/font/google";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
-import { SmoothScroll } from "@/components/smooth-scroll";
-import "lenis/dist/lenis.css";
 import "./globals.css";
 
 const heading = Dela_Gothic_One({ weight: "400", subsets: ["latin"], variable: "--font-heading" });
@@ -13,9 +9,9 @@ const body = DM_Sans({
   variable: "--font-body",
 });
 
+/** Kept neutral: this is shared with the coming-soon page, so it must not describe the product. */
 export const metadata: Metadata = {
   title: "kcal",
-  description: "Meals matched to your body and goal, delivered daily.",
 };
 
 export const viewport: Viewport = {
@@ -25,7 +21,7 @@ export const viewport: Viewport = {
 };
 
 /**
- * Root layout shared by every page.
+ * Root document shell shared by the site and the coming-soon page.
  * @param props - Layout props with the page content.
  * @returns The HTML document shell.
  */
@@ -36,12 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       data-scroll-behavior="smooth"
       className={`${heading.variable} ${body.variable}`}
     >
-      <body className="flex min-h-dvh flex-col antialiased">
-        <SmoothScroll />
-        <SiteHeader />
-        <div className="flex-1">{children}</div>
-        <SiteFooter />
-      </body>
+      <body className="flex min-h-dvh flex-col antialiased">{children}</body>
     </html>
   );
 }
