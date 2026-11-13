@@ -25,6 +25,6 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Everything except built assets and the favicon.
-  matcher: ["/((?!_next/static|favicon.ico).*)"],
+  // Everything except built assets and the app icons.
+  matcher: ["/((?!_next/static|favicon.ico|icon.svg|apple-icon.png).*)"],
 };
